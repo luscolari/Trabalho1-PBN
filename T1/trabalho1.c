@@ -46,9 +46,9 @@ int main(int){
     int c;
     char extensaoIMG[3];
     int i, j, linhas, colunas, valor, r, g, b;
-    int **matriz = (int **)malloc(linhas * sizeof(int *));
+    struct Pixel **matriz = (struct Pixel **)malloc(linhas * sizeof(struct Pixel *));
     for (int i = 0; i < linhas; i++) {
-    matriz[i] = (int *)malloc(colunas * sizeof(int));
+    matriz[i] = (struct Pixel *)malloc(colunas * sizeof(struct Pixel));
     }
 
 
