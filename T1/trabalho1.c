@@ -5,7 +5,7 @@ typedef struct {
     int R, G, B;
 } Pixel;
 
- Pixel **inverte(Pixel **matriz, int linhas, int colunas) {
+ Pixel **cinza(Pixel **matriz, int linhas, int colunas) {
     for (int i = 0; i < linhas; ++i) {
         for (int j = 0; j < colunas; ++j) {
             int cinza = (matriz[i][j].R + matriz[i][j].G + matriz[i][j].B) / 3;
@@ -20,7 +20,7 @@ typedef struct {
 }
 
  Pixel **negativa(Pixel **matrizN, int linhas, int colunas) {
-    matrizN = inverte(matrizN, linhas, colunas);
+    matrizN = cinza(matrizN, linhas, colunas);
     for (int i = 0; i < linhas; i++) {
         for (int j = 0; j < colunas; j++) {
             matrizN[i][j].R = 255 - matrizN[i][j].R;
@@ -32,20 +32,65 @@ typedef struct {
 }
 
 
+ Pixel **aumentaBrilho(Pixel **matrizA, int linhas, int colunas) {
+    matrizA = cinza(matrizA, linhas, colunas);
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+           //codigo para aumentar o brilho
+        }
+    }
+    return matrizA;
+}
+
+
+ Pixel **diminuiBrilho(Pixel **matrizD, int linhas, int colunas) {
+    matrizD = cinza(matrizD, linhas, colunas);
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+           //codigo para diminuir o brilho
+        }
+    }
+    return matrizD;
+}
+
+ Pixel **girar(Pixel **matriz, int linhas, int colunas) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+           //codigo para girar
+        }
+    }
+    return matriz;
+}
+
+ Pixel **envelhecer(Pixel **matriz, int linhas, int colunas) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+           //codigo para envelhecer
+        }
+    }
+    return matriz;
+ }
+
 int main(void){
     FILE *fp;
     int c;
     char extensaoIMG[3];
     int i, j, linhas, colunas, valor, r, g, b;
     int escolha = -1;
+    char img[100];
 
 
     
     printf("---- BEM VINDO -----");
     printf("Por favor digite o nome da imagem: ");
-   //scanf();
+        scanf("%s", img);
 
-   fp = fopen ("kyle.ppm", "r");
+        fp = fopen(img, "r");
+        if(fp == NULL){
+            fprintf(stderr, "Erro ao abrir o arquivo %s.\n", img);
+            exit(EXIT_FAILURE);
+        }
+
 
     fscanf(fp, "%s", extensaoIMG); 					// lê o tipo de imagem P3 
     fscanf(fp, "%d %d", &colunas, &linhas); 	// lê o tamanho da matriz  
@@ -70,7 +115,7 @@ int main(void){
     }
 
  fclose(fp);
-while(escolha != 0) {
+
         wprintf(L"                      Escolha o que deseja fazer em sua imagem:\n"
                         "1 - Tons de cinza                       4 - Diminuir o seu brilho\n"
                         "2 - Negativa                            5 - Girar 90 graus\n"
@@ -100,11 +145,38 @@ Pixel **matrizNova = (Pixel **)malloc(linhas * sizeof(Pixel *));
 
 switch (escolha) {
     case 1:
-        // Caso 1: Inverte a matriz
-        matrizNova = inverte(matriz, linhas, colunas);
+        // Caso 1: Torna a imagem cinza
+        matrizNova = cinza(matriz, linhas, colunas);
+        break;
+
+
+   case 2:
+        // Caso 2: Torna a imagem negativa
+        matrizNova = negativa(matriz, linhas, colunas);
+        break;
+
+    case 3:
+        // Caso 3: Aumenta a imagem cinzenta
+        matrizNova = aumentaBrilho(matriz, linhas, colunas);
+        break;
+
+    case 4:
+        // Caso 4: Diminui a imagem cinzenta
+        matrizNova = diminuiBrilho(matriz, linhas, colunas);
+        break;
+
+    case 5:
+        // Caso 5: Gira a imagem colorida em 90 graus
+        matrizNova = girar(matriz, linhas, colunas);
+        break;
+
+    case 6:
+        // Caso 6: Envelhece a imagem
+        matrizNova = envelhecer(matriz, linhas, colunas);
         break;
 
     default:
+        //se nao seguir nenhum dos casos acima, aparece uma mensagem dizendo erro.
         printf("Erro!");
         break;
 }
@@ -130,4 +202,4 @@ fclose(fp_novo);
     }
 
 }
-}
+
