@@ -116,13 +116,15 @@ int main(void){
 
  fclose(fp);
 
-        wprintf(L"                      Escolha o que deseja fazer em sua imagem:\n"
-                        "1 - Tons de cinza                       4 - Diminuir o seu brilho\n"
-                        "2 - Negativa                            5 - Girar 90 graus\n"
-                        "3 - Aumentar o seu brilho               6 - Envelhecer\n"
-                        "                           [0] - Sair\n");
+        printf("Escolha o que deseja fazer com a imagem"
+            "[1] - Tons de Cinza\n"
+            "[2] - Negativa\n"
+            "[3] - Aumentar o brilho\n"
+            "[4] - Diminuir o brilho\n"
+            "[5] - Girar 90 graus\n"
+            "[6] - Envelhecer\n"
+            "[0] - Sair");
         scanf("%d", &escolha);
-
 
       
 
