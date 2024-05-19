@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Struct para o pixel;
 typedef struct
 {
     int R, G, B;
 } Pixel;
 
+//função que torna uma imagem acinzentada
 Pixel **cinza(Pixel **matriz, int linhas, int colunas)
 {
     for (int i = 0; i < linhas; ++i)
@@ -13,7 +15,6 @@ Pixel **cinza(Pixel **matriz, int linhas, int colunas)
         for (int j = 0; j < colunas; ++j)
         {
             int cinza = (matriz[i][j].R + matriz[i][j].G + matriz[i][j].B) / 3;
-
             matriz[i][j].R = cinza;
             matriz[i][j].G = cinza;
             matriz[i][j].B = cinza;
@@ -23,9 +24,10 @@ Pixel **cinza(Pixel **matriz, int linhas, int colunas)
     return matriz;
 }
 
+//função que torna uma imagem acinzentada em tons negativos
 Pixel **negativa(Pixel **matrizN, int linhas, int colunas)
 {
-
+    cinza(matrizN, linhas, colunas);
     for (int i = 0; i < linhas; i++)
     {
         for (int j = 0; j < colunas; j++)
@@ -38,8 +40,10 @@ Pixel **negativa(Pixel **matrizN, int linhas, int colunas)
     return matrizN;
 }
 
+//função que aumenta o brilho de imagem cinza em 100%
 Pixel **aumentaBrilho(Pixel **matrizA, int linhas, int colunas)
 {
+    cinza(matrizA, linhas, colunas);
     for (int i = 0; i < linhas; i++)
     {
         for (int j = 0; j < colunas; j++)
@@ -52,8 +56,11 @@ Pixel **aumentaBrilho(Pixel **matrizA, int linhas, int colunas)
     return matrizA;
 }
 
+
+//Função que diminui o brilho de uma imagem cinza em 100%
 Pixel **diminuiBrilho(Pixel **matrizD, int linhas, int colunas)
 {
+    cinza(matrizD, linhas, colunas);
     for (int i = 0; i < linhas; i++)
     {
         for (int j = 0; j < colunas; j++)
@@ -66,70 +73,77 @@ Pixel **diminuiBrilho(Pixel **matrizD, int linhas, int colunas)
     return matrizD;
 }
 
+//Função que gira em 90 graus uma imagem colorida
 Pixel **girar(Pixel **matriz, int linhas, int colunas)
 {
-    // Allocate memory for the new matrix
-    Pixel **matrizNova = (Pixel **)malloc(colunas * sizeof(Pixel *));
-    for (int i = 0; i < colunas; i++)
-    {
-        matrizNova[i] = (Pixel *)malloc(linhas * sizeof(Pixel));
+   Pixel **matrizGirada = (Pixel **)malloc(linhas * sizeof(Pixel *));
+    for (int i = 0; i < colunas; i++) {
+        matrizGirada[i] = ( Pixel *)malloc(linhas * sizeof( Pixel));
     }
 
-    // Transpose the matrix
-    for (int i = 0; i < linhas; i++)
-    {
-        for (int j = 0; j < colunas; j++)
-        {
-            matrizNova[j][i] = matriz[i][j];
+    for (int j = 0; j < colunas; j++) {
+        for (int i = 0; i < linhas; i++) {
+            matrizGirada[j][i].R = matriz[linhas - i - 1][j].R;
+            matrizGirada[j][i].G = matriz[linhas - i - 1][j].G;
+            matrizGirada[j][i].B = matriz[linhas - i - 1][j].B;
         }
     }
 
-    // Reverse each row
-    // Reverse each column
-    for (int j = 0; j < colunas; j++)
-    {
-        for (int i = 0; i < linhas / 2; i++)
-        {
-            Pixel temp = matrizNova[i][j];
-            matrizNova[i][j] = matrizNova[linhas - i - 1][j];
-            matrizNova[linhas - i - 1][j] = temp;
-        }
-    }
-
-    return matrizNova;
+    return matrizGirada;
 }
 
+//Função que envelhece uma imagem colorida
 Pixel **envelhecer(Pixel **matriz, int linhas, int colunas)
 {
     for (int i = 0; i < linhas; i++)
     {
         for (int j = 0; j < colunas; j++)
         {
-            matriz[i][j].R -= 20;
-            matriz[i][j].G -= 20;
-            matriz[i][j].B -= 20;
+            matriz[i][j].R = matriz[i][j].R - 20;
+            matriz[i][j].G = matriz[i][j].G - 20;
+            matriz[i][j].B = matriz[i][j].B - 20;
         }
     }
     return matriz;
 }
 
+//Função para tornar as letras em negrito
+void bold(int status) {
+     static const char *seq[] = {"\x1b[0m", "\x1b[1m"};
+     printf("%s", seq[!!status]);
+}
+
+//Função que printa mensagem na tela dizendo que foi possível realizar a operação
+void mensagem(){
+    printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+           "           Operação realizada         \n"
+           "              com sucesso!            \n"
+           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+           "  Para ver o resultado, abra o arquivo\n"); 
+bold(1); printf(" ImgNova.ppm "); bold(0);printf("no Gimp.    \n"
+           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+}
+
 int main()
 {
     FILE *fp;
-    int c;
     char extensaoIMG[3];
-    int i, j, linhas, colunas, valor, r, g, b;
+    int linhas, colunas, valor, r, g, b;
     int escolha = -1;
     char img[100];
 
-    printf("---- BEM VINDO -----");
-    printf("Por favor digite o nome da imagem: ");
+    printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+           "   Bem-vindo ao Mexendo em Imagens    \n"
+           "           Programda criado por:      \n"
+           "     Luísa Scolari e Marcela Zarichta \n" 
+           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+    printf("Por favor digite o nome da imagem:\n ");
     scanf("%s", img);
 
     fp = fopen(img, "r");
     if (fp == NULL)
     {
-        fprintf(stderr, "Erro ao abrir o arquivo %s.\n", img);
+        bold(1); printf("Erro: arquivo não encontrado %s.\n", img); bold(0);
         exit(EXIT_FAILURE);
     }
 
@@ -157,14 +171,20 @@ int main()
 
     fclose(fp);
 
-    printf("Escolha o que deseja fazer com a imagem"
-           "[1] - Tons de Cinza\n"
-           "[2] - Negativa\n"
-           "[3] - Aumentar o brilho\n"
-           "[4] - Diminuir o brilho\n"
-           "[5] - Girar 90 graus\n"
-           "[6] - Envelhecer\n"
-           "[0] - Sair");
+    while(escolha != 0){
+    printf(""
+                                            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                                            "       Escolha o que deseja fazer     \n"
+                                            "             com a imagem:            \n"
+                                            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                                            "  [1] - Tons de Cinza                 \n"
+                                            "  [2] - Negativa                      \n"
+                                            "  [3] - Aumentar o brilho             \n"
+                                            "  [4] - Diminuir o brilho             \n"
+                                            "  [5] - Girar 90 graus                \n"
+                                            "  [6] - Envelhecer                    \n"
+                                            "  [0] - Sair                          \n"
+                                            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
     scanf("%d", &escolha);
 
     // Definição da matrizNova
@@ -183,36 +203,44 @@ int main()
     case 1:
         // Caso 1: Torna a imagem cinza
         matrizNova = cinza(matriz, linhas, colunas);
+        mensagem();
         break;
 
     case 2:
         // Caso 2: Torna a imagem negativa
         matrizNova = negativa(matriz, linhas, colunas);
+        mensagem();
         break;
 
     case 3:
         // Caso 3: Aumenta a imagem cinzenta
         matrizNova = aumentaBrilho(matriz, linhas, colunas);
+        mensagem();
         break;
 
     case 4:
         // Caso 4: Diminui a imagem cinzenta
         matrizNova = diminuiBrilho(matriz, linhas, colunas);
+        mensagem();
         break;
 
     case 5:
         // Caso 5: Gira a imagem colorida em 90 graus
         matrizNova = girar(matriz, linhas, colunas);
+        mensagem();
         break;
 
     case 6:
         // Caso 6: Envelhece a imagem
         matrizNova = envelhecer(matriz, linhas, colunas);
+        mensagem();
         break;
 
+    case 0:
+        break;
     default:
-        // se nao seguir nenhum dos casos acima, aparece uma mensagem dizendo erro.
-        printf("Erro!");
+        // Se nao seguir nenhum dos casos acima, aparece uma mensagem dizendo erro e volta para o menu.
+        bold(1); printf("Erro: opção inválida!\n"); bold(0);
         break;
     }
 
@@ -220,7 +248,7 @@ int main()
     FILE *fp_novo = fopen("ImgNova.ppm", "w");
     if (fp_novo == NULL)
     {
-        fprintf(stderr, "Erro! Nao foi possivel criar a imagem ImgNova.pmp\n");
+        bold(1);fprintf(stderr,"Erro! Nao foi possivel criar a imagem ImgNova.pmp\n"); bold(0);
         exit(EXIT_FAILURE);
     }
 
@@ -233,7 +261,11 @@ int main()
             fprintf(fp_novo, "%d\n%d\n%d\n", matrizNova[i][j].R, matrizNova[i][j].G, matrizNova[i][j].B);
         }
     }
-
     // Fechamento do arquivo
     fclose(fp_novo);
+    }
+    printf(""
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "                   FIM                \n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 }
