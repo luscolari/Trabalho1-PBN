@@ -91,22 +91,15 @@ Pixel **envelhecer(Pixel **matriz, int linhas, int colunas) {
     return novaMatriz;
 }
 
-
-// Função para tornar as letras em negrito
-void bold(int status) {
-    static const char *seq[] = {"\x1b[0m", "\x1b[1m"};
-    printf("%s", seq[!!status]);
-}
-
 // Função que printa mensagem na tela dizendo que foi possível realizar a operação
 void mensagem() {
     printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
            "           Operação realizada         \n"
            "              com sucesso!            \n"
            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-           "  Para ver o resultado, abra o arquivo\n");
-    bold(1); printf(" ImgNova.ppm "); bold(0); printf("no Gimp.    \n"
-                                                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+           "  Para ver o resultado, abra o arquivo\n"
+           "\033[1;30m ImgNova.ppm\033[0m no Gimp.\n"
+           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 }
 
 #include <stdio.h>
